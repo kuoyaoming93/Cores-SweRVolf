@@ -1,0 +1,5 @@
+GCC_PATH = /opt/riscv
+ABI = -mabi=ilp32 -march=rv32imac
+TEST_CFLAGS = 
+OFILES = crt0.o hello_world.o
+TEST_LIBS = -lc
