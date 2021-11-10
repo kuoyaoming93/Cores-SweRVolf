@@ -31,9 +31,9 @@ ifneq (,$(wildcard $(TBDIR)/$(TEST)))
 endif
 
 BSP_DIR = ${BUILD_DIR}/bsp
-BSP_FILES = $(BSP_DIR)/src/*.o
+BSP_FILES = $(BSP_DIR)/src/swervolf_print.o
 OFILES = $(TEST).o 
-HFILES = $(BSP_DIR)/inc
+HFILES = $(BSP_DIR)/inc/
 
 # provide specific link file
 ifeq (,$(wildcard $(TEST_DIR)/$(TEST).ld))
@@ -56,7 +56,7 @@ clean:
 test: $(TEST).elf
 ############ TEST build ###############################
     
-$(TEST).elf: $(OFILES) $(BSP_FILES) $(LINK)
+$(TEST).elf: $(BSP_FILES) $(OFILES) $(LINK)
 	@echo Building $(TEST)
 	$(GCC_PREFIX)-gcc -Wl,-m,elf32lriscv -Wl,--discard-none -T$(LINK) -o $(TEST).elf $(OFILES) $(BSP_FILES) -nostartfiles -nostdlib $(TEST_LIBS)
 	$(GCC_PREFIX)-objdump -d  $(TEST).elf > $(TEST).dump

@@ -1,0 +1,2 @@
+export OFILES = crt0.o cmark.o  
+export TEST_CFLAGS = -finline-limit=400 -mbranch-cost=1 -Ofast -fno-code-hoisting -funroll-all-loops

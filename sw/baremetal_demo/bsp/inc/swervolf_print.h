@@ -11,3 +11,5 @@ static int print_int(int value, int width, int pad, int base);
 int printf_impl(const char* format, va_list ap);
 
 int swerv_printf(const char* format, ...);
+
+uint64_t get_mcycle();

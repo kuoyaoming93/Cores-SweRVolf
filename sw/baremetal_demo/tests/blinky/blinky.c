@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "swevolf_nexys.h"
+#include "swervolf_nexys.h"
 
 volatile uint32_t* const port_led     = (uint32_t*) GPIO_BASE;
 volatile uint32_t* const port_sw      = (uint32_t*) SWITCH_BASE;

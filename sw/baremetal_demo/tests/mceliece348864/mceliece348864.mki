@@ -1,0 +1,6 @@
+GCC_PATH = /opt/riscv
+ABI = -mabi=ilp32 -march=rv32im
+NISTFLAGS = -O3 -fomit-frame-pointer -fPIC -no-pie -I. -Isubroutines
+TEST_CFLAGS = $(NISTFLAGS)
+OFILES = crt0.o test.o benes.o bm.o controlbits.o decrypt.o encrypt.o gf.o operations.o pk_gen.o root.o sk_gen.o synd.o transpose.o util.o fips202.o randombytes.o pk.o sk.o
+TEST_LIBS = -L $(GCC_PATH)/riscv64-unknown-elf/lib/rv32im/ilp32 -L $(GCC_PATH)/lib/gcc/riscv64-unknown-elf/10.2.0/rv32im/ilp32 -lc -lgcc -lnosys 

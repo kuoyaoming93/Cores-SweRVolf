@@ -4,6 +4,8 @@ ENTRY(_start)
 SECTIONS {
     . = 0;
   .text   : { *(.text*) }
-  .data  :  { *(.*data) *(.rodata*) *(.sbss) STACK = ALIGN(16) + 0x2000;}
+  _end = .;
+  end = _end;
+  .data  :  { *(.*data) STACK = ALIGN(16) + 0x2000;}
   .bss : { *(.bss) }
 }
