@@ -131,11 +131,11 @@ void encrypt(unsigned char *s, const unsigned char *pk, unsigned char *e)
 #ifdef KAT
   {
     int k;
-    printf("encrypt e: positions");
+    swerv_printf("encrypt e: positions");
     for (k = 0;k < SYS_N;++k)
       if (e[k/8] & (1 << (k&7)))
-        printf(" %d",k);
-    printf("\n");
+        swerv_printf(" %d",k);
+    swerv_printf("\n\r");
   }
 #endif
 

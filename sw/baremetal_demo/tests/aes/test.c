@@ -9,7 +9,7 @@
 #define CTR 1
 #define ECB 1
 
-#define PRINT_LOG
+//#define PRINT_LOG
 
 #include "aes.h"
 
@@ -53,11 +53,15 @@ int main(void)
             );  */
 #endif
     //exit = test_decrypt_ecb();
-    exit = test_encrypt_cbc() + test_decrypt_cbc() +
-	test_encrypt_ctr() + test_decrypt_ctr() +
-	test_encrypt_ecb() + test_decrypt_ecb();
-    test_encrypt_ecb_verbose();
+    //exit = test_encrypt_cbc() + test_decrypt_cbc() +
+	//test_encrypt_ctr() + test_decrypt_ctr() +
+	exit = test_encrypt_ecb() + test_decrypt_ecb();
+    //test_encrypt_ecb_verbose();
 
+    if(exit==0)
+        swerv_printf("OK>");
+    else 
+        swerv_printf("FAIL>");
     while(1);
 
     return exit;
@@ -155,14 +159,18 @@ static int test_encrypt_ecb(void)
     //time2 = get_mcycle();
 #ifdef PRINT_LOG
     swerv_printf("ECB encrypt: ");
-    if (0 == memcmp((char*) out, (char*) in, 16)) {
-        swerv_printf("SUCCESS!\n\r");
-	return(0);
-    } else {
-        swerv_printf("FAILURE!\n\r");
-	return(1);
-    }
 #endif
+    if (0 == memcmp((char*) out, (char*) in, 16)) {
+#ifdef PRINT_LOG
+        swerv_printf("SUCCESS!\n\r");
+#endif
+	    return(0);
+    } else {
+#ifdef PRINT_LOG
+        swerv_printf("FAILURE!\n\r");
+#endif
+	    return(1);
+    }
     return(0);
 }
 
@@ -191,15 +199,18 @@ static int test_decrypt_ecb(void)
     //time2 = get_mcycle();
 #ifdef PRINT_LOG
     swerv_printf("ECB decrypt: ");
-
+#endif
     if (0 == memcmp((char*) out, (char*) in, 16)) {
+#ifdef PRINT_LOG
         swerv_printf("SUCCESS!\n\r");
+#endif
 	return(0);
     } else {
+#ifdef PRINT_LOG
         swerv_printf("FAILURE!\n\r");
+#endif
 	return(1);
     }
-#endif
     return(0);
 }
 #endif
@@ -243,15 +254,19 @@ static int test_decrypt_cbc(void)
     //time2 = get_mcycle();
 #ifdef PRINT_LOG
     swerv_printf("CBC decrypt: ");
-
+#endif
     if (0 == memcmp((char*) out, (char*) in, 64)) {
+#ifdef PRINT_LOG
         swerv_printf("SUCCESS!\n\r");
+#endif
 	return(0);
     } else {
+#ifdef PRINT_LOG
         swerv_printf("FAILURE!\n\r");
+#endif
 	return(1);
     }
-#endif 
+
     return(0);
 }
 
@@ -291,15 +306,18 @@ static int test_encrypt_cbc(void)
     //time2 = get_mcycle();
 #ifdef PRINT_LOG
     swerv_printf("CBC encrypt: ");
-
+#endif
     if (0 == memcmp((char*) out, (char*) in, 64)) {
+#ifdef PRINT_LOG
         swerv_printf("SUCCESS!\n\r");
+#endif
 	return(0);
     } else {
+#ifdef PRINT_LOG
         swerv_printf("FAILURE!\n\r");
+#endif
 	return(1);
     }
-#endif
     return(0);
 }
 #endif
@@ -353,15 +371,18 @@ static int test_xcrypt_ctr(const char* xcrypt)
     //time2 = get_mcycle();
 #ifdef PRINT_LOG
     swerv_printf("CTR %s: ", xcrypt);
-  
+#endif
     if (0 == memcmp((char *) out, (char *) in, 64)) {
+#ifdef PRINT_LOG
         swerv_printf("SUCCESS!\n\r");
+#endif
 	return(0);
     } else {
+#ifdef PRINT_LOG
         swerv_printf("FAILURE!\n\r");
+#endif
 	return(1);
     }
-#endif
     return(0);
 }
 #endif

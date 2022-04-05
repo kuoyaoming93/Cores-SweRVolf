@@ -67,11 +67,11 @@ int decrypt(unsigned char *e, const unsigned char *sk, const unsigned char *c)
 #ifdef KAT
   {
     int k;
-    printf("decrypt e: positions");
+    swerv_printf("decrypt e: positions");
     for (k = 0;k < SYS_N;++k)
       if (e[k/8] & (1 << (k&7)))
-        printf(" %d",k);
-    printf("\n");
+        swerv_printf(" %d",k);
+    swerv_printf("\n\r");
   }
 #endif
 	

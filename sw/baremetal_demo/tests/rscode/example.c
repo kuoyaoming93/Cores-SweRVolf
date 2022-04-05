@@ -45,6 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include "ecc.h"
 #include "swervolf_print.h"
  
@@ -52,11 +53,11 @@
 atform.";
 
 /* Para RS(255,247) */
-//unsigned char msg[] = "Hola como estas que tal tu dia hoy es mi cumple y cual es el tuyo mi mama me va a preparar una torta y cual es tu regalo osea que regalo te van a hacer que te gustaria tener en realidad no me gusta festejar pero bueno asi es la vida que queres pep";
+unsigned char msg[] = "Hola como estas que tal tu dia hoy es mi cumple y cual es el tuyo mi mama me va a preparar una torta y cual es tu regalo osea que regalo te van a hacer que te gustaria tener en realidad no me gusta festejar pero bueno asi es la vida que queres pep";
 
 
 /* Para RS(255,239) */
-unsigned char msg[] = "Nervously I loaded the twin ducks aboard the revolving platform.";
+//unsigned char msg[] = "Nervously I loaded the twin ducks aboard the revolving platform.";
 unsigned char codeword[256];
  
 /* Some debugging routines to introduce errors or erasures
@@ -67,7 +68,7 @@ unsigned char codeword[256];
 void
 byte_err (int err, int loc, unsigned char *dst)
 {
-  swerv_printf("Adding Error at loc %d, data %#x\n\r", loc, dst[loc-1]);
+  //swerv_printf("Adding Error at loc %d, data %#x\n\r", loc, dst[loc-1]);
   dst[loc-1] ^= err;
 }
 
@@ -77,7 +78,7 @@ byte_err (int err, int loc, unsigned char *dst)
 void
 byte_erasure (int loc, unsigned char dst[], int cwsize, int erasures[]) 
 {
-  swerv_printf("Erasure at loc %d, data %#x\n\r", loc, dst[loc-1]);
+  //swerv_printf("Erasure at loc %d, data %#x\n\r", loc, dst[loc-1]);
   dst[loc-1] = 0;
 }
 
@@ -98,12 +99,12 @@ main (int argc, char *argv[])
   /* ************** */
  
   /* Encode data into codeword, adding NPAR parity bytes */
-  time1 = get_mcycle();
+  //time1 = get_mcycle();
   encode_data(msg, sizeof(msg), codeword);
-  time2 = get_mcycle();
-  swerv_printf("Encoding message: \t %d cycles\n\r",time2-time1);
+  //time2 = get_mcycle();
+  //swerv_printf("Encoding message: \t %d cycles\n\r",time2-time1);
  
-  swerv_printf("Encoded data is: \"%s\"\n\r", codeword);
+  //swerv_printf("Encoded data is: \"%s\"\n\r", codeword);
  
 #define ML (sizeof (msg) + NPAR)
 
@@ -115,7 +116,7 @@ main (int argc, char *argv[])
   byte_err(0x34, 19, codeword);
 
 
-  swerv_printf("with some errors: \"%s\"\n\r", codeword);
+  //swerv_printf("with some errors: \"%s\"\n\r", codeword);
 
   /* We need to indicate the position of the erasures.  Eraseure
      positions are indexed (1 based) from the end of the message... */
@@ -125,10 +126,10 @@ main (int argc, char *argv[])
 
  
   /* Now decode -- encoded codeword size must be passed */
-  time1 = get_mcycle();
+  //time1 = get_mcycle();
   decode_data(codeword, ML);
-  time2 = get_mcycle();
-  swerv_printf("Decoding message: \t %d cycles\n\r",time2-time1);
+  //time2 = get_mcycle();
+  //swerv_printf("Decoding message: \t %d cycles\n\r",time2-time1);
 
   /* check if syndrome is all zeros */
   if (check_syndrome () != 0) {
@@ -137,10 +138,14 @@ main (int argc, char *argv[])
 			     nerasures, 
 			     erasures);
  
-    swerv_printf("Corrected codeword: \"%s\"\n\r", codeword);
+    //swerv_printf("Corrected codeword: \"%s\"\n\r", codeword);
   }
-  swerv_printf("\n\r");
+  //swerv_printf("\n\r");
   
+  if(strcmp(codeword,msg)==0)
+    swerv_printf("OK>");
+  else
+    swerv_printf("FAIL>");
   while(1);
  
   return 0;

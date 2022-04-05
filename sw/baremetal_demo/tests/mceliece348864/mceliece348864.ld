@@ -6,6 +6,6 @@ SECTIONS {
   .text   : { *(.text*) }
   _end = .;
   end = _end;
-  .data  :  { *(.*data) *(.rodata*) *(.sbss) *(.got*) STACK = ALIGN(16) + 0x2000;}
+  .data  :  { *(.*data) *(.rodata*) *(.sbss) *(.got*) STACK = ALIGN(16) + 0x80000;}
   .bss : { *(.bss) }
 }

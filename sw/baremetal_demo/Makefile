@@ -14,6 +14,9 @@
 # limitations under the License.
 #
 
+RESET_VECTOR ?= 0
+FLASH_ADDR ?= 0x0
+
 TEST_CFLAGS = -g -O3 -funroll-all-loops
 ABI = -mabi=ilp32 -march=rv32imac
 
@@ -46,15 +49,23 @@ VPATH = $(TEST_DIR) $(BUILD_DIR) $(TBDIR)
 
 -include $(TEST_DIR)/$(TEST).mki
 
+IMAGE = $(TEST).ub
+
 # Targets
 all: clean test
 
 clean:
-	rm -rf *.o *.dump *.elf *.cpp.s $(BSP_FILES)
+	rm -rf *.o *.dump *.elf *.cpp.s $(BSP_FILES) *.bin *.ub *.ubvh
 
+program:
+	openocd -c "set BINFILE $(IMAGE)" -f ./swervolf_nexys_write_flash.cfg
 
-test: $(TEST).elf
+test: $(TEST).elf $(TEST).bin $(TEST).ub $(TEST).ubvh
 ############ TEST build ###############################
+
+$(TEST).bin: $(TEST).elf
+	$(GCC_PREFIX)-objcopy -O binary $(TEST).elf $(TEST).bin
+	@echo Generating binary file
     
 $(TEST).elf: $(BSP_FILES) $(OFILES) $(LINK)
 	@echo Building $(TEST)
@@ -62,6 +73,19 @@ $(TEST).elf: $(BSP_FILES) $(OFILES) $(LINK)
 	$(GCC_PREFIX)-objdump -d  $(TEST).elf > $(TEST).dump
 	@echo Completed building $(TEST)
 
+%.ub: %.bin
+	mkimage \
+	-A riscv \
+	-C none \
+	-T standalone \
+	-a 0x0 \
+	-e $(RESET_VECTOR) \
+	-n '$@' \
+	-d $< \
+	$@
+
+%.ubvh: %.ub
+	objcopy --change-addresses $(FLASH_ADDR) -I binary -O verilog $< $@
 
 %.o : %.s 
 	$(GCC_PREFIX)-cpp -I${HFILES}  $<  > $*.cpp.s

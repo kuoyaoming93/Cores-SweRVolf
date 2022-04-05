@@ -15,13 +15,15 @@ static void phex(uint8_t* str, uint8_t len);
 
 extern unsigned char sk[6492];
 extern unsigned char pk[261120];
+extern unsigned char ct[128];
+extern unsigned char ss[32];
 
 int main(void)
 {
     int ret_val;
     int i;
-    unsigned char ct[crypto_kem_CIPHERTEXTBYTES];
-    unsigned char ss[crypto_kem_BYTES];
+    //unsigned char ct[crypto_kem_CIPHERTEXTBYTES];
+    unsigned char ss_encrypt[crypto_kem_BYTES];
     unsigned char ss1[crypto_kem_BYTES];
     /*unsigned char pk[crypto_kem_PUBLICKEYBYTES];
     unsigned char sk[crypto_kem_SECRETKEYBYTES];*/
@@ -29,8 +31,8 @@ int main(void)
     /* Init UART for communication */
     init_uart();
 
-    swerv_printf("\nTesting McEliece 348864\n\n\r");
-    swerv_printf("\nUsing pre-computed private key...\n\r");
+    //swerv_printf("\nTesting McEliece 348864\n\n\r");
+    //swerv_printf("\nUsing pre-computed private key, ss and ct...\n\r");
 
     // Create seed
     /*randombytes(seed, 256);
@@ -61,29 +63,34 @@ int main(void)
 
     //long time1,time2;
     //time1 = get_mcycle();
-    if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {
-        swerv_printf("crypto_kem_enc returned <%d>\n\r", ret_val);
-        return KAT_CRYPTO_FAILURE;
-    }
+    //if ( (ret_val = crypto_kem_enc(ct, ss_encrypt, pk)) != 0) {
+    //    swerv_printf("crypto_kem_enc returned <%d>\n\r", ret_val);
+    //    return KAT_CRYPTO_FAILURE;
+    //}
     //time2 = get_mcycle();
 	//swerv_printf("ENC: %d cycles\n\r",time2-time1);
-    swerv_printf("ENC finished\n\r");
+    //swerv_printf("ENC finished\n\r");
 
     //swerv_printf("ct = %s\n\r", ct);
     //swerv_printf("ss = %s\n\r", ss);
 
     //time1 = get_mcycle();
-    if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
-        swerv_printf("crypto_kem_dec returned <%d>\n\r", ret_val);
-        return KAT_CRYPTO_FAILURE;
-    }
+    crypto_kem_dec(ss1, ct, sk);
+    //if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
+    //    swerv_printf("crypto_kem_dec returned <%d>\n\r", ret_val);
+    //    return KAT_CRYPTO_FAILURE;
+    //}
     //time2 = get_mcycle();
 	//swerv_printf("DEC: %d cycles\n\r",time2-time1);
-    swerv_printf("DEC: finished\n\r");
+
+    //swerv_printf("DEC: finished\n\r");
     
     if ( memcmp(ss, ss1, crypto_kem_BYTES) ) {
-        swerv_printf("crypto_kem_dec returned bad 'ss' value\n\r");
-        return KAT_CRYPTO_FAILURE;
+        swerv_printf("FAIL>\n\r");
+        //return KAT_CRYPTO_FAILURE;
+    }
+    else{
+        swerv_printf("OK>\n\r");
     }
 
     while(1);
